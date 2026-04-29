@@ -4,8 +4,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    background-color: #ffe6e6; /* Soft pink background */
-    overflow-x: hidden; /* Prevent horizontal scrolling from floating items */
+    background-color: #ffe6e6; 
+    overflow-x: hidden; 
 }
 
 /* Start Screen Styling */
@@ -48,7 +48,6 @@ body {
     letter-spacing: 1px;
 }
 
-/* Hide utility */
 .hidden {
     display: none !important;
 }
@@ -90,7 +89,7 @@ h1 {
     z-index: 101; 
 }
 
-/* Burst Pop-Out (Expands and fades away) */
+/* Burst Pop-Out Animation */
 .pop-out {
     animation: popOutEffect 1.5s ease-out forwards;
 }
@@ -106,13 +105,13 @@ h1 {
     }
     100% {
         transform: translate(var(--spread-x), var(--spread-y)) scale(1.5);
-        opacity: 0; /* Fades out smoothly in place */
+        opacity: 0; 
     }
 }
 
-/* Falling Rain (Starts from the very top and falls down) */
+/* Falling Rain Animation */
 .falling-rain {
-    top: -50px; /* Start hidden above the screen */
+    top: -50px; 
     animation: fallDown var(--duration) linear forwards;
 }
 
@@ -122,7 +121,7 @@ h1 {
         opacity: 1;
     }
     100% {
-        transform: translateY(110vh) rotate(360deg); /* Falls past the bottom of screen */
-        opacity: 0.5; /* Slight fade as it gets lower */
+        transform: translateY(110vh) rotate(360deg); 
+        opacity: 0.5; 
     }
 }

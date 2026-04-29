@@ -5,16 +5,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const bgMusic = document.getElementById("bg-music");
 
     playBtn.addEventListener("click", () => {
-        // 1. Start music at 5% volume and fade it up
+        // Start music low and fade up
         bgMusic.volume = 0.05; 
         bgMusic.play();
         fadeInMusic(bgMusic);
 
-        // 2. Trigger the button pop effect and start the rain
+        // Trigger button pop and start the rain
         triggerPopEffect(playBtn);
         startRainEffect();
 
-        // 3. Fade out the start screen and show the photos
+        // Fade out the start screen
         setTimeout(() => {
             startScreen.style.opacity = "0";
             
@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function triggerPopEffect(sourceElement) {
-        // Create an initial burst of 40 items from the button
         for (let i = 0; i < 40; i++) {
             createBurstItem(sourceElement);
         }
@@ -66,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function startRainEffect() {
-        // Create a new falling item every 200 milliseconds
         setInterval(createRainItem, 200);
     }
 
@@ -75,18 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
         item.classList.add("floating-item", "falling-rain"); 
         item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
 
-        // Randomize position across the entire width of the screen
         item.style.left = (Math.random() * 100) + 'vw';
         
-        // Randomize fall duration (speed)
-        const duration = Math.random() * 4 + 5; // 5 to 9 seconds
+        const duration = Math.random() * 4 + 5; 
         item.style.setProperty('--duration', duration + 's');
         
         item.style.fontSize = (Math.random() * 15 + 15) + "px";
 
         document.body.appendChild(item);
         
-        // Clean up memory
         setTimeout(() => item.remove(), duration * 1000);
     }
 });
