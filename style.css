@@ -34,7 +34,7 @@ body {
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
     transition: transform 0.2s;
-    position: relative; /* Helps with animation centering */
+    position: relative; 
 }
 
 #play-btn:hover {
@@ -86,11 +86,11 @@ h1 {
 .floating-item {
     position: fixed;
     user-select: none;
-    pointer-events: none; /* Let clicks pass through them */
-    z-index: 101; /* Above everything initially */
+    pointer-events: none; 
+    z-index: 101; 
 }
 
-/* Initial Burst (Pop and expand from button center) */
+/* Burst Pop-Out (Expands and fades away) */
 .pop-out {
     animation: popOutEffect 1.5s ease-out forwards;
 }
@@ -100,31 +100,29 @@ h1 {
         transform: translate(-50%, -50%) scale(0);
         opacity: 1;
     }
-    50% {
+    70% {
         transform: translate(var(--spread-x), var(--spread-y)) scale(1.5);
         opacity: 1;
     }
     100% {
-        transform: translate(var(--spread-x), calc(var(--spread-y) + 150px)) scale(1);
-        opacity: 0;
+        transform: translate(var(--spread-x), var(--spread-y)) scale(1.5);
+        opacity: 0; /* Fades out smoothly in place */
     }
 }
 
-/* Continuous Flow (Appear from button and glide downwards) */
-.glide-down {
-    animation: glideDownAndSpread var(--duration) ease-in-out forwards;
+/* Falling Rain (Starts from the very top and falls down) */
+.falling-rain {
+    top: -50px; /* Start hidden above the screen */
+    animation: fallDown var(--duration) linear forwards;
 }
 
-@keyframes glideDownAndSpread {
+@keyframes fallDown {
     0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1; 
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
     }
     100% {
-        transform: translate(var(--end-x), 110vh) scale(1);
-        opacity: 0; 
+        transform: translateY(110vh) rotate(360deg); /* Falls past the bottom of screen */
+        opacity: 0.5; /* Slight fade as it gets lower */
     }
 }

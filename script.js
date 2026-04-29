@@ -10,8 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
         bgMusic.play();
         fadeInMusic(bgMusic);
 
-        // 2. Trigger the "pop and glide" effect from the button
+        // 2. Trigger the button pop effect and start the rain
         triggerPopEffect(playBtn);
+        startRainEffect();
 
         // 3. Fade out the start screen and show the photos
         setTimeout(() => {
@@ -20,32 +21,28 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 startScreen.classList.add("hidden");
                 mainContent.classList.remove("hidden");
-            }, 1000); // Waits for the CSS fade out to finish
+            }, 1000); 
             
-        }, 2500); // 2.5 seconds of just watching the pop effect before fading out
+        }, 2500); 
     });
 
     function fadeInMusic(audio) {
         let curVol = audio.volume;
         let fade = setInterval(() => {
             if (curVol < 1.0) {
-                curVol += 0.05; // Increase volume by 5%
-                // Ensure we don't go over 1.0
+                curVol += 0.05; 
                 audio.volume = Math.min(1.0, parseFloat(curVol.toFixed(2))); 
             } else {
                 clearInterval(fade);
             }
-        }, 300); // Increases volume every 300ms until full
+        }, 300); 
     }
 
     function triggerPopEffect(sourceElement) {
-        // Create an initial burst of 40 items
+        // Create an initial burst of 40 items from the button
         for (let i = 0; i < 40; i++) {
             createBurstItem(sourceElement);
         }
-        
-        // Follow with a continuous flow falling down the screen
-        setInterval(() => createGlideItem(sourceElement), 250);
     }
 
     function createBurstItem(sourceElement) {
@@ -53,43 +50,39 @@ document.addEventListener("DOMContentLoaded", () => {
         item.classList.add("floating-item", "pop-out"); 
         item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
         
-        // Start exactly at the button's center
         const rect = sourceElement.getBoundingClientRect();
         item.style.left = (rect.left + rect.width / 2) + 'px';
         item.style.top = (rect.top + rect.height / 2) + 'px';
         
-        // Randomize the spread for the CSS animation
-        const spreadX = (Math.random() - 0.5) * 500; // spread left/right
-        const spreadY = (Math.random() - 0.5) * 500; // spread up/down
+        const spreadX = (Math.random() - 0.5) * 600; 
+        const spreadY = (Math.random() - 0.5) * 600; 
         item.style.setProperty('--spread-x', spreadX + 'px');
         item.style.setProperty('--spread-y', spreadY + 'px');
-        
-        // Randomize size
         item.style.fontSize = (Math.random() * 15 + 20) + "px";
 
         document.body.appendChild(item);
         
-        // Clean up memory after animation finishes
         setTimeout(() => item.remove(), 1500);
     }
 
-    function createGlideItem(sourceElement) {
+    function startRainEffect() {
+        // Create a new falling item every 200 milliseconds
+        setInterval(createRainItem, 200);
+    }
+
+    function createRainItem() {
         const item = document.createElement("div");
-        item.classList.add("floating-item", "glide-down"); 
+        item.classList.add("floating-item", "falling-rain"); 
         item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
 
-        // Start exactly at the button's center
-        const rect = sourceElement.getBoundingClientRect();
-        item.style.left = (rect.left + rect.width / 2) + 'px';
-        item.style.top = (rect.top + rect.height / 2) + 'px';
+        // Randomize position across the entire width of the screen
+        item.style.left = (Math.random() * 100) + 'vw';
         
-        // Randomize duration and destination for CSS
-        const duration = Math.random() * 3 + 4; // 4 to 7 seconds
-        const endX = (Math.random() - 0.5) * 1000; // Drift left or right as it falls
-        
+        // Randomize fall duration (speed)
+        const duration = Math.random() * 4 + 5; // 5 to 9 seconds
         item.style.setProperty('--duration', duration + 's');
-        item.style.setProperty('--end-x', endX + 'px');
-        item.style.fontSize = (Math.random() * 15 + 20) + "px";
+        
+        item.style.fontSize = (Math.random() * 15 + 15) + "px";
 
         document.body.appendChild(item);
         
