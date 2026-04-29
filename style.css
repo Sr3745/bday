@@ -5,7 +5,7 @@ body {
     padding: 0;
     font-family: 'Poppins', sans-serif;
     background-color: #ffe6e6; 
-    overflow: hidden; /* Locks the background so swiping feels like an app */
+    overflow: hidden; 
     height: 100vh;
 }
 
@@ -85,11 +85,11 @@ h1 {
     50% { opacity: 1; }
 }
 
-/* --- NEW INTERACTIVE GALLERY CSS --- */
+/* --- INTERACTIVE GALLERY CSS --- */
 .gallery {
     position: relative;
     width: 100%;
-    height: 60vh; /* Adjusts to fit phone screens */
+    height: 60vh; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -97,10 +97,12 @@ h1 {
 
 .gallery img {
     position: absolute;
-    width: 90%;
-    max-width: 450px;
-    max-height: 100%;
-    object-fit: contain;
+    /* Let the image define its own size up to a safe maximum */
+    width: auto;
+    height: auto;
+    max-width: 85vw; /* Prevents going off the sides of the phone */
+    max-height: 60vh; /* Prevents going off the top/bottom */
+    
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     border: 5px solid white;
@@ -108,7 +110,7 @@ h1 {
     /* Hide all photos by default */
     opacity: 0; 
     z-index: 1;
-    pointer-events: none; /* Prevents bugs when swiping */
+    pointer-events: none; 
 }
 
 /* Base Floating Item Style */

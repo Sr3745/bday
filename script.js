@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentSlide = 0;
     let isAnimating = false;
 
-    // Prep the first slide so it's ready when the curtain drops
     if(slides.length > 0) {
         slides[0].style.opacity = '1';
         slides[0].style.transform = 'translateY(0)';
@@ -22,50 +21,44 @@ document.addEventListener("DOMContentLoaded", () => {
         const current = slides[currentSlide];
         const next = slides[index];
 
-        // Prepare the 'next' slide to start either above or below the screen
-        next.style.transition = 'none'; // Turn off animation instantly
+        next.style.transition = 'none'; 
         if (direction === 'next') {
-            next.style.transform = 'translateY(150px)'; // Start below
+            next.style.transform = 'translateY(150px)'; 
         } else {
-            next.style.transform = 'translateY(-150px)'; // Start above
+            next.style.transform = 'translateY(-150px)'; 
         }
         next.style.opacity = '0';
 
-        // Force browser to register the starting position
         void next.offsetWidth;
 
-        // Turn animation on for the slide movement
         const transitionStyle = 'transform 0.8s ease, opacity 0.8s ease';
         next.style.transition = transitionStyle;
         current.style.transition = transitionStyle;
 
-        // Move the current slide out
         if (direction === 'next') {
-            current.style.transform = 'translateY(-150px)'; // Slide up
+            current.style.transform = 'translateY(-150px)'; 
         } else {
-            current.style.transform = 'translateY(150px)'; // Slide down
+            current.style.transform = 'translateY(150px)'; 
         }
         current.style.opacity = '0';
 
-        // Move the next slide into the center
         next.style.transform = 'translateY(0)';
         next.style.opacity = '1';
 
         currentSlide = index;
 
-        // Unlock after animation finishes
         setTimeout(() => {
             isAnimating = false;
         }, 800);
     }
 
     function nextSlide() {
-        let nextIndex = (currentSlide + 1) % slides.length; // Loops back to 0
+        let nextIndex = (currentSlide + 1) % slides.length; 
         goToSlide(nextIndex, 'next');
     }
 
     function prevSlide() {
-        let prevIndex = (currentSlide - 1 + slides.length) % slides.length; // Loops back to 13
+        let prevIndex = (currentSlide - 1 + slides.length) % slides.length; 
         goToSlide(prevIndex, 'prev');
     }
 
@@ -78,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     mainContent.addEventListener('touchmove', (e) => {
-        e.preventDefault(); // Prevents native screen bouncing while swiping
+        e.preventDefault(); 
     }, { passive: false });
 
     mainContent.addEventListener('touchend', (e) => {
@@ -86,9 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const swipeDistance = startY - endY;
 
         if (swipeDistance > 50) {
-            nextSlide(); // Swiped Up -> Next Photo
+            nextSlide(); 
         } else if (swipeDistance < -50) {
-            prevSlide(); // Swiped Down -> Prev Photo
+            prevSlide(); 
         }
     });
 
