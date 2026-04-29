@@ -5,149 +5,95 @@ document.addEventListener("DOMContentLoaded", () => {
     const bgMusic = document.getElementById("bg-music");
 
     playBtn.addEventListener("click", () => {
-        // Step 1: Music starts low volume, fades in
-        bgMusic.volume = 0.05; // Start volume low (5%)
+        // 1. Start music at 5% volume and fade it up
+        bgMusic.volume = 0.05; 
         bgMusic.play();
         fadeInMusic(bgMusic);
 
-        // Step 2: Trigger the "pop and glide" effect from the button
+        // 2. Trigger the "pop and glide" effect from the button
         triggerPopEffect(playBtn);
 
-        // Step 3: Delay the content reveal (after the pop makes its visual impact)
+        // 3. Fade out the start screen and show the photos
         setTimeout(() => {
             startScreen.style.opacity = "0";
+            
             setTimeout(() => {
                 startScreen.classList.add("hidden");
                 mainContent.classList.remove("hidden");
-            }, 1000); // Fade-out time for start screen
-        }, 2500); // Delay showing main images (e.g., 2.5s to show pop flow)
+            }, 1000); // Waits for the CSS fade out to finish
+            
+        }, 2500); // 2.5 seconds of just watching the pop effect before fading out
     });
 
     function fadeInMusic(audio) {
         let curVol = audio.volume;
         let fade = setInterval(() => {
             if (curVol < 1.0) {
-                curVol += 0.1; // Increase volume by 10%
-                audio.volume = parseFloat(curVol.toFixed(2));
+                curVol += 0.05; // Increase volume by 5%
+                // Ensure we don't go over 1.0
+                audio.volume = Math.min(1.0, parseFloat(curVol.toFixed(2))); 
             } else {
                 clearInterval(fade);
             }
-        }, 200); // check and increase volume every 200ms
+        }, 300); // Increases volume every 300ms until full
     }
 
     function triggerPopEffect(sourceElement) {
-        // Create an initial burst to fill quickly
+        // Create an initial burst of 40 items
         for (let i = 0; i < 40; i++) {
             createBurstItem(sourceElement);
         }
-        // Follow with a continuous flow
-        setInterval(() => createGlideItem(sourceElement), 250);
-    }
-
-    function createGlideItem(sourceElement) {
-        const item = document.createElement("div");
-        item.classList.add("floating-item", "glide-down"); // New classes for down glide
-        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
-
-        // Source position from button center
-        const rect = sourceElement.getBoundingClientRect();
-        item.style.left = (rect.left + rect.width / 2) + 'px';
-        item.style.top = (rect.top + rect.height / 2) + 'px';
         
-        // Randomize size and duration
-        item.style.fontSize = (Math.random() * 15 + 20) + "px";
-        const duration = Math.random() * 3 + 4; // Between 4 and 7 seconds
-        item.style.animationDuration = duration + "s";
-
-        document.body.appendChild(item);
-        setTimeout(() => item.remove(), duration * 1000);
+        // Follow with a continuous flow falling down the screen
+        setInterval(() => createGlideItem(sourceElement), 250);
     }
 
     function createBurstItem(sourceElement) {
         const item = document.createElement("div");
-        item.classList.add("floating-item", "pop-out"); // New class for pop out
+        item.classList.add("floating-item", "pop-out"); 
         item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
+        
+        // Start exactly at the button's center
         const rect = sourceElement.getBoundingClientRect();
         item.style.left = (rect.left + rect.width / 2) + 'px';
         item.style.top = (rect.top + rect.height / 2) + 'px';
         
+        // Randomize the spread for the CSS animation
+        const spreadX = (Math.random() - 0.5) * 500; // spread left/right
+        const spreadY = (Math.random() - 0.5) * 500; // spread up/down
+        item.style.setProperty('--spread-x', spreadX + 'px');
+        item.style.setProperty('--spread-y', spreadY + 'px');
+        
+        // Randomize size
+        item.style.fontSize = (Math.random() * 15 + 20) + "px";
+
         document.body.appendChild(item);
-        setTimeout(() => item.remove(), 2000);
-    }
-});document.addEventListener("DOMContentLoaded", () => {
-    const startScreen = document.getElementById("start-screen");
-    const mainContent = document.getElementById("main-content");
-    const playBtn = document.getElementById("play-btn");
-    const bgMusic = document.getElementById("bg-music");
-
-    playBtn.addEventListener("click", () => {
-        // Step 1: Music starts low volume, fades in
-        bgMusic.volume = 0.05; // Start volume low (5%)
-        bgMusic.play();
-        fadeInMusic(bgMusic);
-
-        // Step 2: Trigger the "pop and glide" effect from the button
-        triggerPopEffect(playBtn);
-
-        // Step 3: Delay the content reveal (after the pop makes its visual impact)
-        setTimeout(() => {
-            startScreen.style.opacity = "0";
-            setTimeout(() => {
-                startScreen.classList.add("hidden");
-                mainContent.classList.remove("hidden");
-            }, 1000); // Fade-out time for start screen
-        }, 2500); // Delay showing main images (e.g., 2.5s to show pop flow)
-    });
-
-    function fadeInMusic(audio) {
-        let curVol = audio.volume;
-        let fade = setInterval(() => {
-            if (curVol < 1.0) {
-                curVol += 0.1; // Increase volume by 10%
-                audio.volume = parseFloat(curVol.toFixed(2));
-            } else {
-                clearInterval(fade);
-            }
-        }, 200); // check and increase volume every 200ms
-    }
-
-    function triggerPopEffect(sourceElement) {
-        // Create an initial burst to fill quickly
-        for (let i = 0; i < 40; i++) {
-            createBurstItem(sourceElement);
-        }
-        // Follow with a continuous flow
-        setInterval(() => createGlideItem(sourceElement), 250);
+        
+        // Clean up memory after animation finishes
+        setTimeout(() => item.remove(), 1500);
     }
 
     function createGlideItem(sourceElement) {
         const item = document.createElement("div");
-        item.classList.add("floating-item", "glide-down"); // New classes for down glide
+        item.classList.add("floating-item", "glide-down"); 
         item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
 
-        // Source position from button center
+        // Start exactly at the button's center
         const rect = sourceElement.getBoundingClientRect();
         item.style.left = (rect.left + rect.width / 2) + 'px';
         item.style.top = (rect.top + rect.height / 2) + 'px';
         
-        // Randomize size and duration
+        // Randomize duration and destination for CSS
+        const duration = Math.random() * 3 + 4; // 4 to 7 seconds
+        const endX = (Math.random() - 0.5) * 1000; // Drift left or right as it falls
+        
+        item.style.setProperty('--duration', duration + 's');
+        item.style.setProperty('--end-x', endX + 'px');
         item.style.fontSize = (Math.random() * 15 + 20) + "px";
-        const duration = Math.random() * 3 + 4; // Between 4 and 7 seconds
-        item.style.animationDuration = duration + "s";
 
         document.body.appendChild(item);
-        setTimeout(() => item.remove(), duration * 1000);
-    }
-
-    function createBurstItem(sourceElement) {
-        const item = document.createElement("div");
-        item.classList.add("floating-item", "pop-out"); // New class for pop out
-        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
-        const rect = sourceElement.getBoundingClientRect();
-        item.style.left = (rect.left + rect.width / 2) + 'px';
-        item.style.top = (rect.top + rect.height / 2) + 'px';
         
-        document.body.appendChild(item);
-        setTimeout(() => item.remove(), 2000);
+        // Clean up memory
+        setTimeout(() => item.remove(), duration * 1000);
     }
 });
