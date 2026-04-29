@@ -1,99 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+/* --- New Pop & Glide Animations --- */
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background-color: #ffe6e6; /* Soft pink background */
-    overflow-x: hidden; /* Prevent horizontal scrolling from floating items */
+/* Initial Burst (Pop and expand from button center) */
+.pop-out {
+    animation: popOutEffect 1.5s ease-out forwards;
 }
 
-/* Start Screen Styling */
-#start-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #ffcccc;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    transition: opacity 1s ease-out;
+@keyframes popOutEffect {
+    0% {
+        transform: translate(0, 0) scale(0);
+        opacity: 1;
+    }
+    50% {
+        /* Pop out to a random spread direction and size */
+        transform: translate(calc((Math.random() - 0.5) * 200px), calc((Math.random() - 0.5) * -200px)) scale(1.5);
+        opacity: 1;
+    }
+    100% {
+        /* Fade out and glide downwards slowly */
+        transform: translate(calc((Math.random() - 0.5) * 150px), 100px) scale(1);
+        opacity: 0;
+    }
 }
 
-#play-btn {
-    padding: 15px 40px;
-    font-size: 24px;
-    border: none;
-    border-radius: 50px;
-    background-color: #ff4d4d;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
-    transition: transform 0.2s;
+/* Continuous Flow (Appear and glide downwards) */
+.glide-down {
+    opacity: 0;
+    animation: glideDownAndSpread ease-in-out forwards;
 }
 
-#play-btn:hover {
-    transform: scale(1.05);
-}
-
-.volume-text {
-    margin-top: 10px;
-    color: #cc0000;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-/* Hide utility */
-.hidden {
-    display: none !important;
-}
-
-/* Main Content Styling */
-#main-content {
-    text-align: center;
-    padding: 50px 20px;
-    position: relative;
-    z-index: 10;
-}
-
-h1 {
-    color: #d63384;
-    font-size: 3em;
-    margin-bottom: 40px;
-}
-
-.gallery {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-.gallery img {
-    width: 80%;
-    max-width: 600px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    border: 5px solid white;
-}
-
-/* Floating Hearts & Flowers Animation */
-.floating-item {
-    position: fixed;
-    bottom: -50px;
-    font-size: 24px;
-    user-select: none;
-    pointer-events: none; /* Let clicks pass through them */
-    z-index: 1;
-    animation: floatUp linear forwards;
-}
-
-@keyframes floatUp {
-    to {
-        transform: translateY(-120vh) rotate(360deg);
+@keyframes glideDownAndSpread {
+    0% {
+        transform: translate(0, 0) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1; /* Quick fade-in */
+    }
+    100% {
+        /* Final destination (randomized horizontal spread and off-screen bottom) */
+        transform: translate(calc((Math.random() - 0.5) * 100vw), 110vh) scale(1);
+        opacity: 0; /* Fade out as it leaves */
     }
 }

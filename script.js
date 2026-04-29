@@ -5,49 +5,149 @@ document.addEventListener("DOMContentLoaded", () => {
     const bgMusic = document.getElementById("bg-music");
 
     playBtn.addEventListener("click", () => {
-        // Play the music
+        // Step 1: Music starts low volume, fades in
+        bgMusic.volume = 0.05; // Start volume low (5%)
         bgMusic.play();
+        fadeInMusic(bgMusic);
 
-        // Fade out the start screen
-        startScreen.style.opacity = "0";
-        
+        // Step 2: Trigger the "pop and glide" effect from the button
+        triggerPopEffect(playBtn);
+
+        // Step 3: Delay the content reveal (after the pop makes its visual impact)
         setTimeout(() => {
-            startScreen.classList.add("hidden");
-            mainContent.classList.remove("hidden");
-            
-            // Start the falling/floating effects
-            startFloatingEffect();
-        }, 1000); // Waits for the 1s fade-out CSS transition
+            startScreen.style.opacity = "0";
+            setTimeout(() => {
+                startScreen.classList.add("hidden");
+                mainContent.classList.remove("hidden");
+            }, 1000); // Fade-out time for start screen
+        }, 2500); // Delay showing main images (e.g., 2.5s to show pop flow)
     });
 
-    function startFloatingEffect() {
-        // Create a new flower/heart every 300 milliseconds
-        setInterval(createFloatingItem, 300);
+    function fadeInMusic(audio) {
+        let curVol = audio.volume;
+        let fade = setInterval(() => {
+            if (curVol < 1.0) {
+                curVol += 0.1; // Increase volume by 10%
+                audio.volume = parseFloat(curVol.toFixed(2));
+            } else {
+                clearInterval(fade);
+            }
+        }, 200); // check and increase volume every 200ms
     }
 
-    function createFloatingItem() {
-        const item = document.createElement("div");
-        item.classList.add("floating-item");
-        
-        // Randomly choose between a flower and a heart
-        const isHeart = Math.random() > 0.5;
-        item.innerText = isHeart ? "💖" : "🌸";
+    function triggerPopEffect(sourceElement) {
+        // Create an initial burst to fill quickly
+        for (let i = 0; i < 40; i++) {
+            createBurstItem(sourceElement);
+        }
+        // Follow with a continuous flow
+        setInterval(() => createGlideItem(sourceElement), 250);
+    }
 
-        // Randomize the starting left position
-        item.style.left = Math.random() * 100 + "vw";
+    function createGlideItem(sourceElement) {
+        const item = document.createElement("div");
+        item.classList.add("floating-item", "glide-down"); // New classes for down glide
+        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
+
+        // Source position from button center
+        const rect = sourceElement.getBoundingClientRect();
+        item.style.left = (rect.left + rect.width / 2) + 'px';
+        item.style.top = (rect.top + rect.height / 2) + 'px';
         
-        // Randomize the duration (speed) of the float
+        // Randomize size and duration
+        item.style.fontSize = (Math.random() * 15 + 20) + "px";
         const duration = Math.random() * 3 + 4; // Between 4 and 7 seconds
         item.style.animationDuration = duration + "s";
-        
-        // Randomize the size slightly
-        item.style.fontSize = (Math.random() * 15 + 20) + "px";
 
         document.body.appendChild(item);
+        setTimeout(() => item.remove(), duration * 1000);
+    }
 
-        // Remove the item from the DOM after it finishes floating to prevent lag
+    function createBurstItem(sourceElement) {
+        const item = document.createElement("div");
+        item.classList.add("floating-item", "pop-out"); // New class for pop out
+        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
+        const rect = sourceElement.getBoundingClientRect();
+        item.style.left = (rect.left + rect.width / 2) + 'px';
+        item.style.top = (rect.top + rect.height / 2) + 'px';
+        
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 2000);
+    }
+});document.addEventListener("DOMContentLoaded", () => {
+    const startScreen = document.getElementById("start-screen");
+    const mainContent = document.getElementById("main-content");
+    const playBtn = document.getElementById("play-btn");
+    const bgMusic = document.getElementById("bg-music");
+
+    playBtn.addEventListener("click", () => {
+        // Step 1: Music starts low volume, fades in
+        bgMusic.volume = 0.05; // Start volume low (5%)
+        bgMusic.play();
+        fadeInMusic(bgMusic);
+
+        // Step 2: Trigger the "pop and glide" effect from the button
+        triggerPopEffect(playBtn);
+
+        // Step 3: Delay the content reveal (after the pop makes its visual impact)
         setTimeout(() => {
-            item.remove();
-        }, duration * 1000);
+            startScreen.style.opacity = "0";
+            setTimeout(() => {
+                startScreen.classList.add("hidden");
+                mainContent.classList.remove("hidden");
+            }, 1000); // Fade-out time for start screen
+        }, 2500); // Delay showing main images (e.g., 2.5s to show pop flow)
+    });
+
+    function fadeInMusic(audio) {
+        let curVol = audio.volume;
+        let fade = setInterval(() => {
+            if (curVol < 1.0) {
+                curVol += 0.1; // Increase volume by 10%
+                audio.volume = parseFloat(curVol.toFixed(2));
+            } else {
+                clearInterval(fade);
+            }
+        }, 200); // check and increase volume every 200ms
+    }
+
+    function triggerPopEffect(sourceElement) {
+        // Create an initial burst to fill quickly
+        for (let i = 0; i < 40; i++) {
+            createBurstItem(sourceElement);
+        }
+        // Follow with a continuous flow
+        setInterval(() => createGlideItem(sourceElement), 250);
+    }
+
+    function createGlideItem(sourceElement) {
+        const item = document.createElement("div");
+        item.classList.add("floating-item", "glide-down"); // New classes for down glide
+        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
+
+        // Source position from button center
+        const rect = sourceElement.getBoundingClientRect();
+        item.style.left = (rect.left + rect.width / 2) + 'px';
+        item.style.top = (rect.top + rect.height / 2) + 'px';
+        
+        // Randomize size and duration
+        item.style.fontSize = (Math.random() * 15 + 20) + "px";
+        const duration = Math.random() * 3 + 4; // Between 4 and 7 seconds
+        item.style.animationDuration = duration + "s";
+
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), duration * 1000);
+    }
+
+    function createBurstItem(sourceElement) {
+        const item = document.createElement("div");
+        item.classList.add("floating-item", "pop-out"); // New class for pop out
+        item.innerText = Math.random() > 0.5 ? "💖" : "🌸";
+        const rect = sourceElement.getBoundingClientRect();
+        item.style.left = (rect.left + rect.width / 2) + 'px';
+        item.style.top = (rect.top + rect.height / 2) + 'px';
+        
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 2000);
     }
 });
