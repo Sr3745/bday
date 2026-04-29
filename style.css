@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', 'Noto Sans Malayalam', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #ffe6e6; 
     overflow: hidden; 
     height: 100vh;
@@ -85,7 +85,7 @@ h1 {
     50% { opacity: 1; }
 }
 
-/* Interactive Gallery */
+/* --- INTERACTIVE GALLERY CSS --- */
 .gallery {
     position: relative;
     width: 100%;
@@ -97,65 +97,23 @@ h1 {
 
 .gallery img {
     position: absolute;
+    /* Let the image define its own size up to a safe maximum */
     width: auto;
     height: auto;
-    max-width: 85vw; 
-    max-height: 60vh; 
+    max-width: 85vw; /* Prevents going off the sides of the phone */
+    max-height: 60vh; /* Prevents going off the top/bottom */
+    
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     border: 5px solid white;
+    
+    /* Hide all photos by default */
     opacity: 0; 
     z-index: 1;
     pointer-events: none; 
 }
 
-/* --- FINAL MESSAGE STYLING --- */
-#final-message {
-    position: fixed;
-    top: 100vh; /* Starts below the screen */
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #ffe6e6;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 50; /* Above images, below start screen */
-    padding: 30px;
-    box-sizing: border-box;
-    text-align: center;
-    transition: transform 0.8s ease-in-out;
-}
-
-#final-message.visible {
-    transform: translateY(-100vh); /* Slides perfectly into view */
-}
-
-#final-message h2 {
-    color: #d63384;
-    font-size: 2.2em;
-    margin-bottom: 20px;
-    line-height: 1.3;
-}
-
-#final-message p {
-    color: #cc0000;
-    font-size: 1.2em;
-    line-height: 1.8;
-    max-width: 500px;
-    font-weight: 600;
-}
-
-#final-message .signature {
-    margin-top: 30px;
-    font-style: italic;
-    font-weight: bold;
-    font-size: 1.4em;
-    color: #d63384;
-}
-
-/* Floating Effects */
+/* Base Floating Item Style */
 .floating-item {
     position: fixed;
     user-select: none;
@@ -163,6 +121,7 @@ h1 {
     z-index: 101; 
 }
 
+/* Burst Pop-Out Animation */
 .pop-out {
     animation: popOutEffect 1.5s ease-out forwards;
 }
@@ -173,6 +132,7 @@ h1 {
     100% { transform: translate(var(--spread-x), var(--spread-y)) scale(1.5); opacity: 0; }
 }
 
+/* Falling Rain Animation */
 .falling-rain {
     top: -50px; 
     animation: fallDown var(--duration) linear forwards;
