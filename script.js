@@ -4,10 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const playBtn = document.getElementById("play-btn");
     const bgMusic = document.getElementById("bg-music");
     const slides = document.querySelectorAll('.gallery img');
+    const finalMessage = document.getElementById('final-message');
 
-    // --- PHOTO SLIDER LOGIC ---
+    // --- PHOTO SLIDER & MESSAGE LOGIC ---
     let currentSlide = 0;
     let isAnimating = false;
+    let isMessageVisible = false;
 
     if(slides.length > 0) {
         slides[0].style.opacity = '1';
@@ -52,43 +54,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 800);
     }
 
-    function nextSlide() {
-        let nextIndex = (currentSlide + 1) % slides.length; 
-        goToSlide(nextIndex, 'next');
+    function nextAction() {
+        if (isMessageVisible) return; // End of the line
+
+        if (currentSlide < slides.length - 1) {
+            // Go to next photo
+            goToSlide(currentSlide + 1, 'next');
+        } else {
+            // Slide up the final message
+            isMessageVisible = true;
+            finalMessage.classList.add('visible');
+        }
     }
 
-    function prevSlide() {
-        let prevIndex = (currentSlide - 1 + slides.length) % slides.length; 
-        goToSlide(prevIndex, 'prev');
+    function prevAction() {
+        if (isMessageVisible) {
+            // Slide the final message back down
+            isMessageVisible = false;
+            finalMessage.classList.remove('visible');
+            return;
+        }
+
+        if (currentSlide > 0) {
+            // Go back to previous photo
+            goToSlide(currentSlide - 1, 'prev');
+        }
     }
 
     // -- SWIPE (MOBILE) DETECTION --
     let startY = 0;
     let endY = 0;
 
-    mainContent.addEventListener('touchstart', (e) => {
+    // Attach to document.body so swipe works over the message too
+    document.body.addEventListener('touchstart', (e) => {
         startY = e.touches[0].clientY;
     });
 
-    mainContent.addEventListener('touchmove', (e) => {
-        e.preventDefault(); 
+    document.body.addEventListener('touchmove', (e) => {
+        // Only prevent default if we aren't clicking a link/button
+        if(e.target.tagName !== 'BUTTON') {
+            e.preventDefault(); 
+        }
     }, { passive: false });
 
-    mainContent.addEventListener('touchend', (e) => {
+    document.body.addEventListener('touchend', (e) => {
         endY = e.changedTouches[0].clientY;
         const swipeDistance = startY - endY;
 
         if (swipeDistance > 50) {
-            nextSlide(); 
+            nextAction(); 
         } else if (swipeDistance < -50) {
-            prevSlide(); 
+            prevAction(); 
         }
     });
 
     // -- MOUSE WHEEL (PC) DETECTION --
-    mainContent.addEventListener('wheel', (e) => {
-        if (e.deltaY > 0) nextSlide();
-        else if (e.deltaY < 0) prevSlide();
+    document.body.addEventListener('wheel', (e) => {
+        if (e.deltaY > 0) nextAction();
+        else if (e.deltaY < 0) prevAction();
     });
 
 
